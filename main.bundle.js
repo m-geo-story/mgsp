@@ -570,12 +570,13 @@ var canvas;
 var BarGraph = (function () {
     function BarGraph(mgs) {
         this.mgs = mgs;
-        this.graphTitle = "各縣市發票平均消費金額(2013/1):";
+        this.graphTitle = "2013年1月-各縣市平均消費金額(便利商店)：";
     } //END OF constructor
     BarGraph.prototype.ngOnInit = function () {
         var _this = this;
         this.mgs.refTime.subscribe(function (time) {
-            _this.graphTitle = "\u5404\u7E23\u5E02\u767C\u7968\u5E73\u5747\u6D88\u8CBB\u91D1\u984D(" + time[0] + "/" + time[1] + "):";
+            // this.graphTitle = `各縣市平均消費金額(${time[0]}/${time[1]}):`;
+            _this.graphTitle = time[0] + "\u5E74" + time[1] + "\u6708-\u5404\u7E23\u5E02\u5E73\u5747\u6D88\u8CBB\u91D1\u984D(\u4FBF\u5229\u5546\u5E97)\uFF1A";
         });
         this.mgs.refData.subscribe(function (data) {
             // remove line-canvas when user select new time record
@@ -646,7 +647,7 @@ var BarGraph = (function () {
             .attr('y', function (d) { return gc.yScaleLinear(d['value']) - 5; })
             .attr('text-anchor', 'middle')
             .text(function (d) { return d['value']; })
-            .style('font-size', '1.2rem')
+            .style('font-size', '1rem')
             .style('fill', function (d, i) {
             if (i % 2 == 0) {
                 return 'black';
@@ -672,15 +673,9 @@ var BarGraph = (function () {
         });
         this.drawAvgLine(dataForDraw);
         //make text more reabable
-        if (names.length > 10) {
-            textOfAaxis.attr('transform', 'rotate(45)')
-                .attr('x', 20)
-                .style('font-size', '1.2rem');
-        }
-        else {
-            textOfAaxis.attr('y', 10).attr('font-size', '1.5rem');
-        }
-        ;
+        textOfAaxis.attr('transform', 'rotate(45)')
+            .attr('x', 20)
+            .style('font-size', '1rem');
     }; // end of drawBarGraph
     /*
     * drwa average line and the info text
@@ -963,12 +958,12 @@ var LineGraphComponent = (function () {
             gc.setFrameMargin(-1, -1, -1, 50);
             canvas = gc.createCanvas('line-canvas', '#line-graph');
             _this.drawLineGraph(id);
-            _this.lineGraphTitle = "\u6BCF\u6708\u767C\u7968\u5E73\u5747\u6D88\u8CBB\u91D1\u984D(" + id + "):";
+            _this.lineGraphTitle = id + "\u9010\u6708\u5E73\u5747\u6D88\u8CBB\u91D1\u984D\uFF08\u4FBF\u5229\u5546\u5E97\uFF09:";
             //scoll to line-graph
             // const element = document.querySelector('#test');
             // if (element) { element.scrollIntoView(element); }
-            var offsetTop = __WEBPACK_IMPORTED_MODULE_3_d3__["select"]('#line-graph')['_groups'][0][0].offsetTop;
-            window.scrollTo(0, offsetTop - gc.getFrameHeight() / 3);
+            // let offsetTop = d3.select('#line-graph')['_groups'][0][0].offsetTop;
+            // window.scrollTo(0, offsetTop - gc.getFrameHeight() / 3);
         });
     };
     LineGraphComponent.prototype.drawLineGraph = function (id) {
@@ -1187,14 +1182,14 @@ var ReceiptMapComponent = (function () {
             //get feature value from data that pass by dropdwon list
             if (valueOfFeatures.get(props['COUNTYID']) != null) {
                 var valueOfCountry = valueOfFeatures.get(props['COUNTYID'])['value'];
-                divOfInfoControl.innerHTML = "<h4>" + countryName + "</h4><b>\u5E73\u5747\u5BA2\u55AE\u50F9\uFF1A" + valueOfCountry + "</b>";
+                divOfInfoControl.innerHTML = "<h5>" + countryName + "</h5><b>\u6D88\u8CBB\u91D1\u984D\uFF1A" + valueOfCountry + "\u5143</b>";
             }
             else {
-                divOfInfoControl.innerHTML = "<h4>" + countryName + "</h4><b>\u5E73\u5747\u5BA2\u55AE\u50F9\uFF1A\u7121\u8CC7\u6599</b>";
+                divOfInfoControl.innerHTML = "<h5>" + countryName + "</h5><b>\u6D88\u8CBB\u91D1\u984D\uFF1A\u7121\u8CC7\u6599</b>";
             }
         }
         else {
-            divOfInfoControl.innerHTML = '<h4>click country</h4>';
+            divOfInfoControl.innerHTML = '<h5>可點選縣市</h5>';
         }
     }; //.updateInfoCOntrol
     /**
@@ -1533,7 +1528,7 @@ exports = module.exports = __webpack_require__(34)();
 
 
 // module
-exports.push([module.i, ".navbar{\n    min-height: 50px;\n}", ""]);
+exports.push([module.i, ".navbar{\n    min-height: 50px;\n    background-color:#4C92FF; /*main color*/\n}\n\n.navbar-brand{\n    color:white;\n}\n\n.navbar-right>li>a{\n    color:white;\n}\n\n.navbar-default .navbar-toggle .icon-bar{\n    background-color: white;\n}", ""]);
 
 // exports
 
@@ -1605,7 +1600,7 @@ exports = module.exports = __webpack_require__(34)();
 
 
 // module
-exports.push([module.i, "/*http://leafletjs.com/examples/mobile*/\n#lmap { \n    height: 40vh;\n    width: auto; \n    /*margin-right: 12vh;*/\n}\n\n@media (min-width: 1200px) {\n    #lmap { \n        width: auto;\n        height:40vh;\n        margin: 0px auto;\n    }\n}\n\n\n.infoControl{\n    padding: 6px 8px;\n    font: 14px/16px Arial, Helvetica, sans-serif;\n    background: white;\n    background: rgba(255,255,255,0.8);\n    box-shadow: 0 0 15px rgba(0,0,0,0.2);\n    border-radius: 5px;\n}\n\n.infoControl h4 {\n    margin: 0 0 5px;\n    color: #777;\n    text-align: center;\n}", ""]);
+exports.push([module.i, "/*http://leafletjs.com/examples/mobile*/\n#lmap { \n    height: 40vh;\n    width: auto; \n    /*margin-right: 12vh;*/\n}\n\n@media (min-width: 1200px) {\n    #lmap { \n        width: auto;\n        height:40vh;\n        margin: 0px auto;\n    }\n}\n\n\n.infoControl{\n    padding: 3px 4px;\n    font: 1rem Arial, Helvetica, sans-serif;\n    background: white;\n    background: rgba(255,255,255,0.8);\n    box-shadow: 0 0 8px rgba(0,0,0,0.2);\n    border-radius: 5px;\n}\n\n.infoControl h5 {\n    margin: 0 0 2px;\n    color: #777;\n    text-align: center;\n}", ""]);
 
 // exports
 
@@ -1623,7 +1618,7 @@ exports = module.exports = __webpack_require__(34)();
 
 
 // module
-exports.push([module.i, ".line1 {\n    text-indent: 2em;\n    font-size: 1.8rem;\n}\n\n.li{\n    font-size:1.8rem;\n}", ""]);
+exports.push([module.i, ".line1 {\n    text-indent: 2em;\n    font-size: 1.8rem;\n}\n\n.listPoints > li {\n    font-size:1.8rem;\n    margin: 1rem 0;\n}\n\nblockquote{\n    color:#26497F;\n}", ""]);
 
 // exports
 
@@ -1883,7 +1878,7 @@ module.exports = "<!--<about-page></about-page>-->\n<div>\n<h1>關於本站</h1>
 /***/ 919:
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Navigation -->\r\n<nav class=\"navbar navbar-default navbar-custom navbar-fixed-top\" role=\"navigation\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"page-scroll\">\r\n            <!-- Brand and btn-group get grouped for better mobile display -->\r\n            <a class=\"navbar-brand\" [routerLink] =\"['']\">MoGeoStory</a>\r\n            <div dropdown>\r\n                <button id=\"single-button\" type=\"button\" class=\"navbar-toggle collapsed\" dropdownToggle>\r\n                    <span class=\"sr-only\">Toggle navigation</span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                </button>\r\n\r\n                <ul dropdownMenu role=\"menu\" class=\"nav navbar-nav dropdown-menu-right\">\r\n                    <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink] =\"['/about']\">ABOUT</a></li>\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" href=\"#\">Another action</a></li>-->\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" href=\"#\">Something else here</a></li>-->\r\n                    <li class=\"divider dropdown-divider\"></li>\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink] = \"['/post/receipt']\">router test</a></li>-->\r\n                </ul>\r\n            </div>\r\n            <!--/.navbar-toggle collapsed-->\r\n        </div>\r\n        <!--/.navbar-header-->\r\n        <div class=\"collapse navbar-collapse\">\r\n            <ul class=\"nav navbar-nav navbar-right\">\r\n                <li>\r\n                    <a [routerLink] =\"['/about']\">ABOUT</a>\r\n                </li>\r\n                <!--<li>\r\n                    <a href=\"about.html\">About</a>\r\n                </li>\r\n                <li>\r\n                    <a href=\"post.html\">Sample Post</a>\r\n                </li>\r\n                <li>\r\n                    <a [routerLink] = \"['/post/receipt']\">router test</a>\r\n                </li>-->\r\n            </ul>\r\n        </div>\r\n        <!--./collapse navbar-collapse-->\r\n    </div>\r\n    <!--/.container-fluid-->\r\n</nav>\r\n\r\n<!-- Page Header -->\r\n<!-- Set your background image for this header on the line below. -->\r\n<header class=\"intro-header\" style=\"background-image: url('src/app/home-bg.jpg')\">\r\n    <div class=\"container\">\r\n        <div class=\"row\">\r\n            <div class=\"col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1\">\r\n                <div class=\"site-heading\">\r\n                    <h1>Geo Stories</h1>\r\n                    <hr class=\"small\">\r\n                    <span class=\"subheading\">讓資訊流通，進而啟發各種可能</span>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</header>\r\n\r\n<!-- Page Content -->\r\n<div class=\"container\">\r\n    <div class=\"row\">\r\n        <!-- Blog Entries Column -->\r\n        <div class=\"col-md-8\">\r\n            <div>\r\n                <!--<home-page></home-page>-->\r\n                <router-outlet></router-outlet>\r\n                <!--<post-receipt></post-receipt>-->\r\n            </div>\r\n        </div>\r\n        <!-- /.col-md-8 -->\r\n\r\n        <div class=\"col-md-4\">\r\n            <!-- Blog Search Well -->\r\n            <div class=\"well\">\r\n                <h4>Blog Search</h4>\r\n                <div class=\"input-group\">\r\n                    <input type=\"text\" class=\"form-control\">\r\n                    <span class=\"input-group-btn\">\r\n                            <button class=\"btn btn-default\" type=\"button\">\r\n                                <span class=\"glyphicon glyphicon-search\"></span>\r\n                    </button>\r\n                    </span>\r\n                </div>\r\n                <!-- /.input-group -->\r\n            </div>\r\n            <!--/.well-->\r\n        </div>\r\n        <!-- /.col-md-4-->\r\n    </div>\r\n    <!-- /.row -->\r\n    <hr>\r\n    <footer>\r\n        <div class=\"row\">\r\n            <div class=\"col-lg-12\">\r\n                <p>Copyright &copy; mobile geo story 2017</p>\r\n            </div>\r\n            <!-- /.col-lg-12 -->\r\n        </div>\r\n        <!-- /.row -->\r\n    </footer>\r\n</div>\r\n<!-- /.container -->"
+module.exports = "<!-- Navigation -->\r\n<nav class=\"navbar navbar-default navbar-custom navbar-fixed-top\" role=\"navigation\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"page-scroll\">\r\n            <!-- Brand and btn-group get grouped for better mobile display -->\r\n            <a class=\"navbar-brand\" [routerLink]=\"['']\">MoGeoStory</a>\r\n            <div dropdown>\r\n                <button id=\"single-button\" type=\"button\" class=\"navbar-toggle collapsed\" dropdownToggle>\r\n                    <span class=\"sr-only\">Toggle navigation</span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                </button>\r\n\r\n                <ul dropdownMenu role=\"menu\" class=\"nav navbar-nav dropdown-menu-right\">\r\n                    <li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink]=\"['/about']\">ABOUT</a></li>\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" href=\"#\">Another action</a></li>-->\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" href=\"#\">Something else here</a></li>-->\r\n                    <li class=\"divider dropdown-divider\"></li>\r\n                    <!--<li role=\"menuitem\"><a class=\"dropdown-item\" [routerLink] = \"['/post/receipt']\">router test</a></li>-->\r\n                </ul>\r\n            </div>\r\n            <!--/.navbar-toggle collapsed-->\r\n        </div>\r\n        <!--/.navbar-header-->\r\n        <div class=\"collapse navbar-collapse\">\r\n            <ul class=\"nav navbar-nav navbar-right\">\r\n                <li>\r\n                    <a [routerLink]=\"['/about']\">ABOUT</a>\r\n                </li>\r\n                <!--<li>\r\n                    <a href=\"about.html\">About</a>\r\n                </li>\r\n                <li>\r\n                    <a href=\"post.html\">Sample Post</a>\r\n                </li>\r\n                <li>\r\n                    <a [routerLink] = \"['/post/receipt']\">router test</a>\r\n                </li>-->\r\n            </ul>\r\n        </div>\r\n        <!--./collapse navbar-collapse-->\r\n    </div>\r\n    <!--/.container-fluid-->\r\n</nav>\r\n\r\n<!-- Page Header -->\r\n<!-- Set your background image for this header on the line below. -->\r\n<header class=\"intro-header\" style=\"background-image: url('src/app/home-bg.jpg')\">\r\n    <div class=\"container\">\r\n        <div class=\"row\">\r\n            <div class=\"col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1\">\r\n                <div class=\"site-heading\">\r\n                    <h1>Geo Stories</h1>\r\n                    <hr class=\"small\">\r\n                    <span class=\"subheading\">讓資訊流通，進而啟發各種可能</span>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</header>\r\n\r\n<!-- Page Content -->\r\n<div class=\"container\">\r\n    <div class=\"row\">\r\n        <!-- Blog Entries Column -->\r\n        <div class=\"col-md-8\">\r\n            <div>\r\n                <!--<home-page></home-page>-->\r\n                <router-outlet></router-outlet>\r\n                <!--<post-receipt></post-receipt>-->\r\n            </div>\r\n        </div>\r\n        <!-- /.col-md-8 -->\r\n\r\n        <div class=\"col-md-4\">\r\n            <!-- Blog Search Well -->\r\n            <div class=\"well\">\r\n                <h4>Blog Search</h4>\r\n                <div class=\"input-group\">\r\n                    <input type=\"text\" class=\"form-control\">\r\n                    <span class=\"input-group-btn\">\r\n                            <button class=\"btn btn-default\" type=\"button\">\r\n                                <span class=\"glyphicon glyphicon-search\"></span>\r\n                    </button>\r\n                    </span>\r\n                </div>\r\n                <!-- /.input-group -->\r\n            </div>\r\n            <!--/.well-->\r\n        </div>\r\n        <!-- /.col-md-4-->\r\n    </div>\r\n    <!-- /.row -->\r\n    <hr>\r\n    <footer>\r\n        <div class=\"row\">\r\n            <div class=\"col-lg-12\">\r\n                <p>Copyright &copy; mobile geo story 2017</p>\r\n            </div>\r\n            <!-- /.col-lg-12 -->\r\n        </div>\r\n        <!-- /.row -->\r\n    </footer>\r\n</div>\r\n<!-- /.container -->"
 
 /***/ }),
 
@@ -1925,7 +1920,7 @@ module.exports = "<div id='leaf-map'></div>\n"
 /***/ 925:
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n    <h1 class='h1'>{{title}}</h1>\n    <h4>{{brief}}</h4>\n\n    <div class=\"abstract\">\n        <blockquote>\n            <p>相較台北、新北或新竹市等地方而言，便利商店在離島(澎湖、金門、馬祖)、彰化和屏東等地，可能是重要的購物場所之一，而非僅只是順手買個方便的地方。</p>\n        </blockquote>\n        <p class=\"line1\">檢視地圖中2013年至2016年的便利商店消費平均客單價資料，可以發現幾項有趣的事情：</p>\n        <ul>\n            <li>離島(澎湖、金門、馬祖)、彰化和屏東等地，通常是消費金額最高的前三名；而台北、新北和新竹市等地，則都是消費金額最少的三個地區之一。</li>\n            <li>金門一直到2013年12月才有在便利商店，然後消費金額一直逐年上升。</li>\n            <li>無論南北的便利商店在一月份時，都是平均消費最高的時候，但南部地區也可能在七月達到另一個高峰。</li>\n        </ul>\n        <blockquote>\n            <p>於下方\n                <u>拖動時間軸</u>可以看到不同時間點的消費差異；\n                <u>點選地圖</u>上的各縣市，則可看到各縣市的消費趨勢。</p>\n        </blockquote>\n    </div>\n</div>\n\n<post-receipt-dropdown-list></post-receipt-dropdown-list>  \n<post-receipt-map></post-receipt-map>\n<post-receipt-bar-graph></post-receipt-bar-graph>\n<post-receipt-line-graph></post-receipt-line-graph>"
+module.exports = "<div>\n    <h1 class='h1'>{{title}}</h1>\n    <h4>{{brief}}</h4>\n\n    <div class=\"abstract\">\n        <blockquote>\n            <p>相較台北、新北或新竹市等地方而言，便利商店在離島(澎湖、金門、馬祖)、彰化和屏東等地，可能是重要的購物場所之一，而非僅只是順手買個方便的地方。</p>\n        </blockquote>\n        <p class=\"line1\">檢視地圖中2013年至2016年的便利商店消費平均客單價資料，可以發現幾項有趣的事情：</p>\n        <ul class=\"listPoints\">\n            <li>離島(澎湖、金門、馬祖)、彰化和屏東等地，通常是消費金額最高的前三名；而台北、新北和新竹市等地，則都是消費金額最少的三個地區之一。</li>\n            <li>金門一直到2013年12月才有在便利商店，然後消費金額一直逐年上升。</li>\n            <li>無論南北的便利商店在一月份時，都是平均消費最高的時候，但南部地區也可能在七月達到另一個高峰。</li>\n        </ul>\n        <blockquote>\n            <p>於下方\n                <u>拖動時間軸</u>可以看到不同時間點的消費差異；\n                <u>點選地圖</u>上的各縣市，則可看到各縣市的消費趨勢。</p>\n        </blockquote>\n    </div>\n</div>\n\n<post-receipt-dropdown-list></post-receipt-dropdown-list>  \n<post-receipt-map></post-receipt-map>\n<post-receipt-bar-graph></post-receipt-bar-graph>\n<post-receipt-line-graph></post-receipt-line-graph>"
 
 /***/ }),
 
